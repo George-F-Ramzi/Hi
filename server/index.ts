@@ -1,12 +1,24 @@
 import express from "express";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
+import http from "http";
 import cors from "cors";
+import userRoute from "./Routes/userRoute";
 
 dotenv.config();
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
 app.use(cors());
+app.use(express.json());
 
-app.listen(process.env.PORT, () => {
+app.use(userRoute);
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
+
+server.listen(process.env.PORT, () => {
   console.log("Server Started At : " + process.env.PORT);
 });
