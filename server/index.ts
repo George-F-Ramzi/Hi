@@ -14,7 +14,11 @@ app.use(cors());
 app.use(express.json());
 app.use(userRoute);
 
-io.on("connection", (socket) => {});
+io.on("connection", (socket) => {
+  socket.on("send", (message) => {
+    io.emit("recive", message, socket.id);
+  });
+});
 
 server.listen(process.env.PORT, () => {
   console.log("Server Started At : " + process.env.PORT);
