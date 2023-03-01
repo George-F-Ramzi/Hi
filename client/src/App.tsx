@@ -1,7 +1,7 @@
 import LandingPage from "./pages/landingPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login, { LoginAction } from "./components/login";
-import Register from "./components/register";
+import Register, { RegisterAction } from "./components/register";
 
 function App() {
   const router = createBrowserRouter([
@@ -10,13 +10,14 @@ function App() {
       element: <LandingPage />,
       children: [
         {
-          path: "/",
+          path: "/login",
           element: <Login />,
           action: LoginAction,
         },
         {
           path: "/join",
           element: <Register />,
+          action: RegisterAction,
         },
       ],
     },

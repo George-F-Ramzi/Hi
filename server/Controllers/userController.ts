@@ -79,3 +79,7 @@ export const Register = (req: Request, res: Response) => {
     }
   );
 };
+
+export const Allow = (req: Request, res: Response) => {
+  return res.status(200).send("Allow to join");
+};
