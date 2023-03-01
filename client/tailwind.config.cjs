@@ -16,8 +16,14 @@ module.exports = {
         body1: "16px",
         body2: "14px",
       },
+      textColor: {
+        black: "#0D0F11",
+        gray: "#64748B",
+      },
       colors: {
         gray1: "#64748B",
+        gray2: "#E7EAEE",
+        gray3: "#F7F8F9",
       },
       borderColor: {
         default: "#A0ABBB",
@@ -25,5 +31,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
