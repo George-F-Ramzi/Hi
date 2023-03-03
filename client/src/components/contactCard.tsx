@@ -1,21 +1,41 @@
-function ContactCard() {
+import { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { LastMessage } from "../Api/authApi";
+import { IUSER } from "../Types/authTypes";
+
+interface Prop {
+  user: IUSER;
+}
+
+function ContactCard({ user }: Prop) {
+  const [lastMessage, setLastMessage] = useState<string>("");
+
+  useEffect(() => {
+    LoadLastMessage();
+  }, []);
+
+  const LoadLastMessage = async () => {
+    try {
+      let data: AxiosResponse = await LastMessage(user.id);
+      setLastMessage(data.data);
+    } catch (error) {
+      toast("Somthing Wrong Happen", { type: "error" });
+    }
+  };
+
   return (
     <div className="w-full flex mb-12 items-center  ">
       <img
-        src="https://picsum.photos/200/300"
+        src={user.photo}
         className="w-[54px] h-[54px] rounded-[100px] min-w-[54px]"
       />
       <div className="ml-[16px] w-full ">
-        <div className="flex">
-          <p className="text-body1 mb-1 font-medium text-black grow">
-            George Fawzi
-          </p>
-          <p className="text-body2 font-normal  bg-primary shadow-sm h-[24px] w-[24px] flex justify-center rounded items-center text-white ">
-            4
-          </p>
-        </div>
+        <p className="text-body1 mb-1 font-medium text-black grow">
+          {user.username}
+        </p>
         <p className="text-body2 font-normal w-full text-gray ">
-          A new message from george
+          {lastMessage != "" ? lastMessage : "Added to friend list"}
         </p>
       </div>
     </div>

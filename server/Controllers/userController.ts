@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import pool from "../Middelwaers/mysql";
-import { LoginType, RegisterType } from "../Types/userRouteTypes";
+import { LoginType, RegisterType } from "../Types/RouteTypes";
 import Joi from "joi";
 import lodash from "lodash";
 import bcrypt from "bcrypt";

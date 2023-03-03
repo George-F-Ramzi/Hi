@@ -23,7 +23,7 @@ module.exports = {
       colors: {
         gray1: "#64748B",
         gray2: "#E7EAEE",
-        gray3: "#F7F8F9",
+        gray3: "#F8F8F8",
       },
       borderColor: {
         default: "#A0ABBB",
