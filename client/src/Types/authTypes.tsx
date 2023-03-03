@@ -4,3 +4,9 @@ export interface IUSER {
   id: number;
   details: string | null;
 }
+
+export interface IProfile {
+  user: IUSER;
+  isMe: boolean;
+  isContact: boolean;
+}
