@@ -20,10 +20,6 @@ export async function IsContact(id: number) {
   return await http.get(`/isContact/${id}`);
 }
 
-export async function ProfileState(id: number) {
-  return await http.get(`/profileState/${id}`);
-}
-
 export async function AcceptRequest(id: number) {
   return await http.post(`/acceptRequest/${id}`);
 }
@@ -38,4 +34,16 @@ export async function RemoveRequest(id: number) {
 
 export async function SendRequest(id: number) {
   return await http.post(`/sendRequest/${id}`);
+}
+
+export async function IsReceiving(id: number) {
+  return await http.get(`/isReceving/${id}`);
+}
+
+export async function IsSending(id: number) {
+  return await http.get(`/isSending/${id}`);
+}
+
+export async function CancelRequest(id: number) {
+  return await http.post(`/cancelRequest/${id}`);
 }

@@ -23,11 +23,12 @@ router.route("/search/:value").get(JWT, Search);
 router.route("/contacts").get(JWT, Contacts);
 router.route("/last/:sender").get(JWT, LastMessage);
 router.route("/isContact/:id").get(JWT, isContact);
-router.route("/profileState/:id").get(JWT, IsRequesting, IsSending);
 router.route("/acceptRequest/:id").post(JWT, AcceptRequest, InsertContact);
 router.route("/requests").get(JWT, ContactsRequests);
 router.route("/removeRequest/:id").post(JWT, RemoveRequest);
 router.route("/cancelRequest/:id").post(JWT, CancelRequest);
 router.route("/sendRequest/:id").post(JWT, InsertRequest);
+router.route("/isSending/:id").get(JWT, IsSending);
+router.route("/isReceving/:id").get(JWT, IsRequesting);
 
 export default router;

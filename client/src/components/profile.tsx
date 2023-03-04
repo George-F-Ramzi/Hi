@@ -2,7 +2,14 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { FiArrowLeft, FiSettings } from "react-icons/fi";
 import { toast } from "react-toastify";
-import { ProfileState } from "../Api/authApi";
+import {
+  AcceptRequest,
+  CancelRequest,
+  IsReceiving,
+  IsSending,
+  RemoveRequest,
+  SendRequest,
+} from "../Api/authApi";
 import { IUSER } from "../Types/authTypes";
 
 interface Prop {
@@ -17,27 +24,40 @@ function Profile({ user, isMe, isContact, close }: Prop) {
   const [receiving, setReceiving] = useState<boolean>(false);
 
   useEffect(() => {
+    setSending(false);
+    setReceiving(false);
     if (isMe) return;
     if (isContact) return;
-    CheckState();
+    CheckReceving();
   }, [user]);
 
-  const CheckState = async () => {
+  const CheckReceving = async () => {
     let state: string;
     try {
-      let { data }: AxiosResponse = await ProfileState(user.id);
+      let { data }: AxiosResponse = await IsReceiving(user.id);
       state = data;
-
-      if (state.includes("Is Requesting")) setReceiving(true);
-      else if (state.includes("Is Sending")) setSending(true);
-      else if (state.includes("Is Not Sending")) {
-        setSending(false);
-        setReceiving(false);
+      if (state.includes("Is Not Requesting")) {
+        CheckSending();
+      } else {
+        setReceiving(true);
       }
-
-      //
     } catch (error) {
       toast("Something Wrong Happen");
+    }
+  };
+
+  const CheckSending = async () => {
+    let state: string;
+    try {
+      let { data }: AxiosResponse = await IsSending(user.id);
+      state = data;
+      if (state.includes("Is Not Sending")) {
+        setSending(false);
+      } else {
+        setSending(true);
+      }
+    } catch (error) {
+      toast("Something Wrong Happen", { type: "error" });
     }
   };
 
@@ -74,22 +94,75 @@ function Profile({ user, isMe, isContact, close }: Prop) {
       ) : (
         ""
       )}
-      {sending && !receiving ? (
-        <button className="shadow-sm w-full mt-12 py-[12px] bg-gray2 rounded text-black uppercase text-body1">
+      {sending ? (
+        <button
+          onClick={async () => {
+            try {
+              await CancelRequest(user.id);
+              isContact = false;
+              setSending(false);
+              setReceiving(false);
+            } catch (error) {
+              toast("Something Wrong Happen", { type: "error" });
+            }
+          }}
+          className="shadow-sm w-full mt-12 py-[12px] bg-gray2 rounded text-black uppercase text-body1"
+        >
           Remove Request
         </button>
       ) : (
         ""
       )}
-      {receiving && !sending ? (
+      {receiving ? (
         <div className="flex mt-12 ">
-          <button className="shadow-sm w-full  py-[12px] bg-primary rounded text-white uppercase text-body1">
+          <button
+            onClick={async () => {
+              try {
+                await AcceptRequest(user.id);
+                isContact = false;
+                setSending(false);
+                setReceiving(false);
+              } catch (error) {
+                toast("Something Wrong Happen", { type: "error" });
+              }
+            }}
+            className="shadow-sm w-full  py-[12px] bg-primary rounded text-white uppercase text-body1"
+          >
             Accept
           </button>
-          <button className="shadow-sm w-full  ml-4 py-[12px] bg-gray2 rounded text-black uppercase text-body1">
+          <button
+            onClick={async () => {
+              try {
+                await RemoveRequest(user.id);
+                isContact = false;
+                setSending(false);
+                setReceiving(false);
+              } catch (error) {
+                toast("Something Wrong Happen", { type: "error" });
+              }
+            }}
+            className="shadow-sm w-full  ml-4 py-[12px] bg-gray2 rounded text-black uppercase text-body1"
+          >
             Remove
           </button>
         </div>
+      ) : (
+        ""
+      )}
+      {!receiving && !sending && !isContact ? (
+        <button
+          onClick={async () => {
+            try {
+              await SendRequest(user.id);
+              setSending(true);
+            } catch (error) {
+              toast("Something Wrong Happen", { type: "error" });
+            }
+          }}
+          className="shadow-sm w-full mt-12 py-[12px] bg-primary rounded text-white uppercase text-body1"
+        >
+          Send Request
+        </button>
       ) : (
         ""
       )}

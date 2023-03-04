@@ -94,48 +94,6 @@ export const isContact = (req: Request, res: Response) => {
   );
 };
 
-export const IsRequesting = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  let user: string = req.body.user;
-  let id: string = req.params.id;
-
-  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
-    return res.status(404).send("Some details aren't correct");
-  }
-
-  let query: string = `select receiver_id from Contact_Request where receiver_id = ? and sender_id = ?`;
-
-  pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
-    if (err) return res.status(404).send("Something wrong happen");
-    if (lodash.isEmpty(result)) {
-      return next();
-    }
-    return res.status(200).send("Is Requesting");
-  });
-};
-
-export const IsSending = (req: Request, res: Response) => {
-  let user: string = req.body.user;
-  let id: string = req.params.id;
-
-  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
-    return res.status(404).send("Some details aren't correct");
-  }
-
-  let query: string = `select receiver_id from Contact_Request where receiver_id = ? and sender_id = ?`;
-
-  pool.query(query, [id, user], (err, result: RowDataPacket[]) => {
-    if (err) return res.status(404).send("Something wrong happen");
-    if (lodash.isEmpty(result)) {
-      return res.status(200).send("Is Not Sending");
-    }
-    return res.status(200).send("Is Sending");
-  });
-};
-
 export const AcceptRequest = (
   req: Request,
   res: Response,
@@ -236,5 +194,43 @@ export const InsertRequest = (req: Request, res: Response) => {
   pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
     if (err) return res.status(404).send("Something wrong happen");
     return res.status(200).send("Sending Done");
+  });
+};
+
+export const IsRequesting = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `select receiver_id from Contact_Request where receiver_id = ? and sender_id = ?`;
+
+  pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    if (lodash.isEmpty(result)) {
+      return res.status(200).send("Is Not Requesting");
+    }
+    return res.status(200).send("Is Requesting");
+  });
+};
+
+export const IsSending = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `select receiver_id from Contact_Request where receiver_id = ? and sender_id = ?`;
+
+  pool.query(query, [id, user], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    if (lodash.isEmpty(result)) {
+      return res.status(200).send("Is Not Sending");
+    }
+    return res.status(200).send("Is Sending");
   });
 };
