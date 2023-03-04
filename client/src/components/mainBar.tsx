@@ -12,6 +12,7 @@ let placeholder = { username: "", photo: "", id: 0, details: null };
 
 function MainBar() {
   const [user, setUser] = useState<IUSER>(placeholder);
+  const [mainUser, setMainUser] = useState<IUSER>(placeholder);
   const [search, setSearch] = useState<string>("");
   const [searchedUsers, setSearchedUsers] = useState<IUSER[]>([]);
   const [contactsData, setContactsData] = useState<IUSER[]>([]);
@@ -29,6 +30,7 @@ function MainBar() {
     try {
       let data: AxiosResponse = await LoadingUser();
       setUser(data.data);
+      setMainUser(data.data);
     } catch (error) {
       toast("Somthing Wrong Happen", { type: "error" });
     }
@@ -73,10 +75,10 @@ function MainBar() {
         <>
           <div className="flex items-center">
             <img
-              src={user.photo}
+              src={mainUser.photo}
               className="w-[54px] h-[54px] rounded-[100px]"
             />
-            <p className="text-black ml-4 text-body1">{user.username}</p>
+            <p className="text-black ml-4 text-body1">{mainUser.username}</p>
           </div>
           <div className="mt-8 w-full min-h-[56px] relative rounded">
             <form

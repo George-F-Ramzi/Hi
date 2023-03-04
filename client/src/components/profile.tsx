@@ -68,6 +68,9 @@ function Profile({ user, isMe, isContact, close }: Prop) {
         size={"22px"}
         className="cursor-pointer"
       />
+      <h4 className="my-8 text-headline4 font-bold">
+        {isMe ? "My Profile" : "Profile"}
+      </h4>
       <div className="mt-8 flex items-center">
         <img
           className="w-[64px] h-[64px] rounded-[100px] min-w-[64px]"
@@ -149,7 +152,7 @@ function Profile({ user, isMe, isContact, close }: Prop) {
       ) : (
         ""
       )}
-      {!receiving && !sending && !isContact ? (
+      {!receiving && !sending && !isContact && !isMe ? (
         <button
           onClick={async () => {
             try {
