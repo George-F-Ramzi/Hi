@@ -19,10 +19,10 @@ function Profile({ user, isMe, isContact, close }: Prop) {
   useEffect(() => {
     if (isMe) return;
     if (isContact) return;
-    CheckRequest();
+    CheckState();
   }, [user]);
 
-  const CheckRequest = async () => {
+  const CheckState = async () => {
     let state: string;
     try {
       let { data }: AxiosResponse = await ProfileState(user.id);

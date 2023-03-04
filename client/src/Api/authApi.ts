@@ -23,3 +23,19 @@ export async function IsContact(id: number) {
 export async function ProfileState(id: number) {
   return await http.get(`/profileState/${id}`);
 }
+
+export async function AcceptRequest(id: number) {
+  return await http.post(`/acceptRequest/${id}`);
+}
+
+export async function Requests() {
+  return await http.get(`/requests`);
+}
+
+export async function RemoveRequest(id: number) {
+  return await http.post(`/removeRequest/${id}`);
+}
+
+export async function SendRequest(id: number) {
+  return await http.post(`/sendRequest/${id}`);
+}

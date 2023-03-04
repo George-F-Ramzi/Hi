@@ -135,3 +135,106 @@ export const IsSending = (req: Request, res: Response) => {
     return res.status(200).send("Is Sending");
   });
 };
+
+export const AcceptRequest = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `delete from Contact_Request where sender_id = ? and receiver_id = ?`;
+
+  pool.query(query, [id, user], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    next();
+  });
+};
+
+export const InsertContact = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `insert into Contacts (contact_id , contact_to) values (?,?)`;
+
+  pool.query(query, [id, user], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
+      if (err) return res.status(404).send("Something wrong happen");
+      return res.status(200).send("Accepting Request Done");
+    });
+  });
+};
+
+export const ContactsRequests = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+
+  if (typeof user === "undefined") {
+    return res.status(404).send("User Not Found");
+  }
+
+  let query: string = `select username,photo,id,date from Contact_Request 
+join Users on Users.id = sender_id and receiver_id = ?`;
+
+  pool.query(query, [user], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    res.send(result);
+  });
+};
+
+export const RemoveRequest = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `delete from Contact_Request where sender_id = ? and receiver_id = ?`;
+
+  pool.query(query, [id, user], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    return res.status(200).send("Removeing Request Done");
+  });
+};
+
+export const CancelRequest = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `delete from Contact_Request where sender_id = ? and receiver_id = ?`;
+
+  pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    return res.status(200).send("Removeing Request Done");
+  });
+};
+
+export const InsertRequest = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `insert into Contact_Request (sender_id , receiver_id) values (?,?)`;
+
+  pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    return res.status(200).send("Sending Done");
+  });
+};

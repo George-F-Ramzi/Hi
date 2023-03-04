@@ -10,3 +10,10 @@ export interface IProfile {
   isMe: boolean;
   isContact: boolean;
 }
+
+export interface IRequests {
+  username: string;
+  photo: string;
+  id: number;
+  date: string;
+}
