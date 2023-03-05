@@ -234,3 +234,23 @@ export const IsSending = (req: Request, res: Response) => {
     return res.status(200).send("Is Sending");
   });
 };
+
+export const Converstion = (req: Request, res: Response) => {
+  let user: string = req.body.user;
+  let id: string = req.params.id;
+
+  if (typeof id === "undefined" && id === "" && typeof user === "undefined") {
+    return res.status(404).send("Some details aren't correct");
+  }
+
+  let query: string = `select distinct a.message , a.date from Conversation as a
+join Conversation b on b.sender_id = ? and b.receiver_id = ? order by date asc`;
+
+  pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
+    if (err) return res.status(404).send("Something wrong happen");
+    if (lodash.isEmpty(result)) {
+      return res.status(200).send("No Messasges Found");
+    }
+    return res.status(200).send(result);
+  });
+};

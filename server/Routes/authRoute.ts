@@ -4,6 +4,7 @@ import {
   CancelRequest,
   Contacts,
   ContactsRequests,
+  Converstion,
   InsertContact,
   InsertRequest,
   isContact,
@@ -30,5 +31,6 @@ router.route("/cancelRequest/:id").post(JWT, CancelRequest);
 router.route("/sendRequest/:id").post(JWT, InsertRequest);
 router.route("/isSending/:id").get(JWT, IsSending);
 router.route("/isReceving/:id").get(JWT, IsRequesting);
+router.route("/converstion/:id").get(JWT, Converstion);
 
 export default router;

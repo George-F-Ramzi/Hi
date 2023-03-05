@@ -1,10 +1,33 @@
-import { IUSER } from "../Types/authTypes";
+import { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { Converstion } from "../Api/authApi";
+import { IMESSAGE, IUSER } from "../Types/authTypes";
 
 interface Prop {
   user: IUSER;
 }
 
 function ChattingSection({ user }: Prop) {
+  const [chat, setChat] = useState<IMESSAGE[]>();
+
+  useEffect(() => {
+    if (user.username != "") LoadChat();
+  }, [user]);
+
+  useEffect(() => {
+    console.log(chat);
+  }, [chat]);
+
+  const LoadChat = async () => {
+    try {
+      let { data }: AxiosResponse = await Converstion(user.id);
+      setChat(data);
+    } catch (error) {
+      toast("Somthing Wrong Happen", { type: "error" });
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-gray3 flex justify-center relative">
       {user.username != "" ? (

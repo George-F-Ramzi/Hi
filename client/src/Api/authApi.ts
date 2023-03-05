@@ -47,3 +47,7 @@ export async function IsSending(id: number) {
 export async function CancelRequest(id: number) {
   return await http.post(`/cancelRequest/${id}`);
 }
+
+export async function Converstion(id: number) {
+  return await http.get(`/converstion/${id}`);
+}

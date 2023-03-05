@@ -17,3 +17,8 @@ export interface IRequests {
   id: number;
   date: string;
 }
+
+export interface IMESSAGE {
+  message: string;
+  date: string;
+}
