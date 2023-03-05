@@ -26,7 +26,6 @@ function HomePage() {
       let io = Socket(url);
       io.on("connect", () => {
         io.emit("ID", user.id);
-        io.emit("receive", "Hello Word");
       });
     }
   }, [user]);
@@ -43,7 +42,7 @@ function HomePage() {
   return (
     <div className="flex relative">
       <MainBar mainUSER={user} setTarget={setTarget} />
-      <ChattingSection user={target} photo={user.photo} />
+      <ChattingSection user={target} photo={user.photo} myID={user.id} />
       {showRequest ? (
         <RequestsBar show={setShowRequest} />
       ) : (

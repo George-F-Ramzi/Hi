@@ -8,10 +8,12 @@ import Message from "./message";
 interface Prop {
   user: IUSER;
   photo: string;
+  myID: number;
 }
 
-function ChattingSection({ user, photo }: Prop) {
-  const [chat, setChat] = useState<IMESSAGE[]>();
+function ChattingSection({ user, photo, myID }: Prop) {
+  const [chat, setChat] = useState<IMESSAGE[]>([]);
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     if (user.username != "") LoadChat();
@@ -24,6 +26,13 @@ function ChattingSection({ user, photo }: Prop) {
     } catch (error) {
       toast("Somthing Wrong Happen", { type: "error" });
     }
+  };
+
+  const AppendMessage = () => {
+    let newObj: IMESSAGE = { date: "", message, sender_id: myID };
+    let Chat: IMESSAGE[] = chat;
+    Chat.push(newObj);
+    setChat(Chat);
   };
 
   return (
@@ -39,17 +48,31 @@ function ChattingSection({ user, photo }: Prop) {
           </div>
           <div className="w-full h-full overflow-y-scroll scrollbar-hide p-6 flex flex-col justify-end">
             {Array.isArray(chat) &&
-              chat?.map((m, i) => {
+              chat.map((m, i) => {
                 return (
                   <Message key={i} text={m} partner={user} myPhoto={photo} />
                 );
               })}
           </div>
-          <div className="z-40 drop-shadow-2xl bg-white mb-4  bottom-4 rounded h-[96px] w-[90%] flex items-center p-4">
-            <input
-              placeholder="What's on your mind?"
-              className="h-[56px] w-full pl-4 border outline-none rounded border-default"
-            />
+          <div className="z-40 border-t drop-shadow-2xl bg-white mb-4  bottom-4 rounded h-[96px] w-[90%] flex items-center p-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                AppendMessage();
+                setMessage("");
+              }}
+              className="w-full"
+            >
+              <input
+                placeholder="What's on your mind?"
+                className="h-[56px] w-full pl-4 border outline-none rounded border-default"
+                value={message}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setMessage(e.target.value);
+                }}
+              />
+            </form>
           </div>
         </div>
       ) : (

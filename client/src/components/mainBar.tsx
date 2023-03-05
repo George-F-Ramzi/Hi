@@ -67,7 +67,15 @@ function MainBar({ mainUSER, setTarget }: Prop) {
         />
       ) : (
         <>
-          <div className="flex items-center">
+          <div
+            onClick={() => {
+              setIsMe(true);
+              setIsContact(false);
+              setProfile(mainUSER);
+              setProfileUI(true);
+            }}
+            className="flex items-center cursor-pointer"
+          >
             <img
               src={mainUSER.photo}
               className="w-[54px] h-[54px] rounded-[100px]"
