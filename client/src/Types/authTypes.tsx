@@ -21,4 +21,5 @@ export interface IRequests {
 export interface IMESSAGE {
   message: string;
   date: string;
+  sender_id: number;
 }

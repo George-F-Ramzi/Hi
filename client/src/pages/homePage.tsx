@@ -43,7 +43,7 @@ function HomePage() {
   return (
     <div className="flex relative">
       <MainBar mainUSER={user} setTarget={setTarget} />
-      <ChattingSection user={target} />
+      <ChattingSection user={target} photo={user.photo} />
       {showRequest ? (
         <RequestsBar show={setShowRequest} />
       ) : (
