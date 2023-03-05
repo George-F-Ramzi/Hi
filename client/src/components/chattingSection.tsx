@@ -17,10 +17,6 @@ function ChattingSection({ user, photo }: Prop) {
     if (user.username != "") LoadChat();
   }, [user]);
 
-  useEffect(() => {
-    if (user.username != "") console.log(chat);
-  }, [chat]);
-
   const LoadChat = async () => {
     try {
       let { data }: AxiosResponse = await Converstion(user.id);
@@ -31,7 +27,7 @@ function ChattingSection({ user, photo }: Prop) {
   };
 
   return (
-    <div className="w-full h-screen bg-gray3 flex justify-center relative">
+    <div className="w-full h-screen bg-gray5 flex justify-center relative">
       {user.username != "" ? (
         <div className="flex flex-col w-full items-center ">
           <div className="mt-[60px] flex flex-col items-center">
@@ -39,16 +35,17 @@ function ChattingSection({ user, photo }: Prop) {
               src={user.photo}
               className="w-[72px] h-[72px] rounded-[100px]"
             />
-            <h5 className="text-body1 mt-4 font-meduim ">{user.username}</h5>
+            <h5 className="text-body1 mt-4 font-bold ">{user.username}</h5>
           </div>
           <div className="w-full h-full overflow-y-scroll scrollbar-hide p-6 flex flex-col justify-end">
-            {chat?.map((m, i) => {
-              return (
-                <Message key={i} text={m} partner={user} myPhoto={photo} />
-              );
-            })}
+            {Array.isArray(chat) &&
+              chat?.map((m, i) => {
+                return (
+                  <Message key={i} text={m} partner={user} myPhoto={photo} />
+                );
+              })}
           </div>
-          <div className="z-40 shadow-lg bg-white  bottom-4 rounded h-[96px] w-[90%] flex items-center p-4">
+          <div className="z-40 drop-shadow-2xl bg-white mb-4  bottom-4 rounded h-[96px] w-[90%] flex items-center p-4">
             <input
               placeholder="What's on your mind?"
               className="h-[56px] w-full pl-4 border outline-none rounded border-default"

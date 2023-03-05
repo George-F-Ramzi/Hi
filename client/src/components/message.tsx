@@ -11,7 +11,7 @@ function Message({ text, partner, myPhoto }: Prop) {
     <>
       {text.sender_id === partner.id ? (
         <div className="w-full flex flex-col my-4">
-          <p className=" mb-1 ml-12 max-w-[280px] h-fit p-[12px] bg-gray4 text-body1 font-normal w-fit rounded">
+          <p className=" mb-1 ml-12 max-w-[280px] h-fit p-[16px] bg-gray4 text-body1 font-normal w-fit rounded-[20px] rounded-bl-none">
             {text.message}
           </p>
           <img
@@ -22,7 +22,7 @@ function Message({ text, partner, myPhoto }: Prop) {
       ) : (
         <div className="w-full flex justify-end  my-4">
           <div className="flex-col max-w-[280px] ">
-            <p className=" mb-1 mr-12 max-w-fit h-fit p-[12px] bg-blue1 text-white text-body1 font-normal w-fit rounded">
+            <p className=" mb-1 mr-12 max-w-fit h-fit p-[16px] bg-blue1 text-white text-body1 font-normal w-fit rounded-br-none rounded-[20px]">
               {text.message}
             </p>
             <div className="w-full flex justify-end max-h-[40px]">

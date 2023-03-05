@@ -244,9 +244,10 @@ export const Converstion = (req: Request, res: Response) => {
   }
 
   let query: string = `select distinct a.message,a.sender_id , a.date from Conversation as a
-join Conversation b on b.sender_id = ? and b.receiver_id = ? order by date asc`;
+join Conversation b on a.sender_id = ? and a.receiver_id = ? or a.sender_id = ? and a.receiver_id = ? 
+order by date asc`;
 
-  pool.query(query, [user, id], (err, result: RowDataPacket[]) => {
+  pool.query(query, [user, id, id, user], (err, result: RowDataPacket[]) => {
     if (err) return res.status(404).send("Something wrong happen");
     if (lodash.isEmpty(result)) {
       return res.status(200).send("No Messasges Found");

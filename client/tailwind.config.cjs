@@ -26,6 +26,7 @@ module.exports = {
         gray3: "#F8F8F8",
         gray4: "#E2E8F0",
         blue1: "#1D4ED8",
+        gray6: "#F7F8F9",
       },
       borderColor: {
         default: "#A0ABBB",
