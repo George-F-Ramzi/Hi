@@ -17,9 +17,10 @@ interface Prop {
   isMe: boolean;
   isContact: boolean;
   close: (check: boolean) => void;
+  setTarget: (user: IUSER) => void;
 }
 
-function Profile({ user, isMe, isContact, close }: Prop) {
+function Profile({ user, isMe, isContact, close, setTarget }: Prop) {
   const [sending, setSending] = useState<boolean>(false);
   const [receiving, setReceiving] = useState<boolean>(false);
 
@@ -91,7 +92,10 @@ function Profile({ user, isMe, isContact, close }: Prop) {
         </div>
       </div>
       {isContact ? (
-        <button className="shadow-sm w-full mt-12 py-[12px] bg-primary rounded text-white uppercase text-body1">
+        <button
+          onClick={() => setTarget(user)}
+          className="shadow-sm w-full mt-12 py-[12px] bg-primary rounded text-white uppercase text-body1"
+        >
           Start Chatting
         </button>
       ) : (

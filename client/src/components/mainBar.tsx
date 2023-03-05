@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
 import { toast } from "react-toastify";
-import { Contacts, LoadingUser, Search } from "../Api/authApi";
+import { Contacts, Search } from "../Api/authApi";
 import { IProfile, IUSER } from "../Types/authTypes";
 import ContactCard from "./contactCard";
 import Profile from "./profile";
@@ -10,9 +10,13 @@ import ResultContact from "./resultContact";
 
 let placeholder = { username: "", photo: "", id: 0, details: null };
 
-function MainBar() {
-  const [user, setUser] = useState<IUSER>(placeholder);
-  const [mainUser, setMainUser] = useState<IUSER>(placeholder);
+interface Prop {
+  mainUSER: IUSER;
+  setTarget: (user: IUSER) => void;
+}
+
+function MainBar({ mainUSER, setTarget }: Prop) {
+  const [profile, setProfile] = useState<IUSER>(placeholder);
   const [search, setSearch] = useState<string>("");
   const [searchedUsers, setSearchedUsers] = useState<IUSER[]>([]);
   const [contactsData, setContactsData] = useState<IUSER[]>([]);
@@ -22,19 +26,8 @@ function MainBar() {
   const [isContact, setIsContact] = useState<boolean>(false);
 
   useEffect(() => {
-    LoadUser();
     LoadContacts();
   }, []);
-
-  const LoadUser = async () => {
-    try {
-      let data: AxiosResponse = await LoadingUser();
-      setUser(data.data);
-      setMainUser(data.data);
-    } catch (error) {
-      toast("Somthing Wrong Happen", { type: "error" });
-    }
-  };
 
   const LoadContacts = async () => {
     try {
@@ -58,7 +51,7 @@ function MainBar() {
   const OpenProfile = ({ user, isMe, isContact }: IProfile) => {
     setIsContact(isContact);
     setIsMe(isMe);
-    setUser(user);
+    setProfile(user);
     setProfileUI(true);
   };
 
@@ -69,16 +62,17 @@ function MainBar() {
           close={setProfileUI}
           isContact={isContact}
           isMe={isMe}
-          user={user}
+          user={profile}
+          setTarget={setTarget}
         />
       ) : (
         <>
           <div className="flex items-center">
             <img
-              src={mainUser.photo}
+              src={mainUSER.photo}
               className="w-[54px] h-[54px] rounded-[100px]"
             />
-            <p className="text-black ml-4 text-body1">{mainUser.username}</p>
+            <p className="text-black ml-4 text-body1">{mainUSER.username}</p>
           </div>
           <div className="mt-8 w-full min-h-[56px] relative rounded">
             <form
@@ -133,7 +127,7 @@ function MainBar() {
             {!resultUI ? (
               contactsData.length != 0 ? (
                 contactsData.map((c, i) => {
-                  return <ContactCard key={i} user={c} />;
+                  return <ContactCard setTarget={setTarget} key={i} user={c} />;
                 })
               ) : (
                 <p className="mt-8 w-full text-center">No Contacts</p>

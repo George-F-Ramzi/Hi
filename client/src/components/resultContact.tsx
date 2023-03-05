@@ -40,7 +40,7 @@ function ResultContact({ user, open }: Prop) {
       onClick={() => {
         open({ user, isMe, isContact });
       }}
-      className="w-full flex mb-12 items-center  "
+      className="w-full flex mb-12 items-center cursor-pointer  "
     >
       <img
         src={user.photo}

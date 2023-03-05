@@ -3,15 +3,47 @@ import { FiCornerDownRight } from "react-icons/fi";
 import ChattingSection from "../components/chattingSection";
 import MainBar from "../components/mainBar";
 import RequestsBar from "../components/requestsBar";
+import Socket from "socket.io-client";
+import { AxiosResponse } from "axios";
+import { LoadingUser } from "../Api/authApi";
+import { toast } from "react-toastify";
+import { IUSER } from "../Types/authTypes";
+
+let url: string = "http://localhost:3001";
+let placeholder = { username: "", photo: "", id: 0, details: null };
 
 function HomePage() {
   const [showRequest, setShowRequest] = useState<boolean>(true);
-  useEffect(() => {}, []);
+  const [user, setUser] = useState<IUSER>(placeholder);
+  const [target, setTarget] = useState<IUSER>(placeholder);
+
+  useEffect(() => {
+    LoadUser();
+  }, []);
+
+  useEffect(() => {
+    if (user.id != 0 && user.id != null) {
+      let io = Socket(url);
+      io.on("connect", () => {
+        io.emit("ID", user.id);
+        io.emit("receive", "Hello Word");
+      });
+    }
+  }, [user]);
+
+  const LoadUser = async () => {
+    try {
+      let data: AxiosResponse = await LoadingUser();
+      setUser(data.data);
+    } catch (error) {
+      toast("Somthing Wrong Happen", { type: "error" });
+    }
+  };
 
   return (
     <div className="flex relative">
-      <MainBar />
-      <ChattingSection />
+      <MainBar mainUSER={user} setTarget={setTarget} />
+      <ChattingSection user={target} />
       {showRequest ? (
         <RequestsBar show={setShowRequest} />
       ) : (

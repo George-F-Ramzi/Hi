@@ -6,9 +6,10 @@ import { IUSER } from "../Types/authTypes";
 
 interface Prop {
   user: IUSER;
+  setTarget: (user: IUSER) => void;
 }
 
-function ContactCard({ user }: Prop) {
+function ContactCard({ user, setTarget }: Prop) {
   const [lastMessage, setLastMessage] = useState<string>("");
 
   useEffect(() => {
@@ -25,7 +26,10 @@ function ContactCard({ user }: Prop) {
   };
 
   return (
-    <div className="w-full flex mb-12 items-center  ">
+    <div
+      onClick={() => setTarget(user)}
+      className="w-full flex mb-12 items-center cursor-pointer "
+    >
       <img
         src={user.photo}
         className="w-[54px] h-[54px] rounded-[100px] min-w-[54px]"
