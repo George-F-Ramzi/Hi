@@ -1,38 +1,53 @@
-import { AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Converstion } from "../Api/authApi";
+import { useEffect, useRef } from "react";
+import { Socket } from "socket.io-client";
 import { IMESSAGE, IUSER } from "../Types/authTypes";
 import Message from "./message";
 
 interface Prop {
   user: IUSER;
   photo: string;
-  myID: number;
+  chat: IMESSAGE[];
+  message: string;
+  setMessage: (value: string) => void;
+  setChat: (value: IMESSAGE[]) => void;
+  newMessage: () => void;
+  socket: Socket;
 }
 
-function ChattingSection({ user, photo, myID }: Prop) {
-  const [chat, setChat] = useState<IMESSAGE[]>([]);
-  const [message, setMessage] = useState<string>("");
+function ChattingSection({
+  user,
+  photo,
+  chat,
+  message,
+  setMessage,
+  newMessage,
+  setChat,
+  socket,
+}: Prop) {
+  const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (user.username != "") LoadChat();
-  }, [user]);
+  useEffect((): any => {
+    ref.current?.scrollTo({
+      top: ref.current.scrollHeight,
+      behavior: "smooth",
+    });
+    socket.on("receive", (m) => {
+      ReceiveHandler(m);
+    });
+    return () =>
+      socket.off("receive", (m) => {
+        ReceiveHandler(m);
+      });
+  }, [chat]);
 
-  const LoadChat = async () => {
-    try {
-      let { data }: AxiosResponse = await Converstion(user.id);
-      setChat(data);
-    } catch (error) {
-      toast("Somthing Wrong Happen", { type: "error" });
+  const ReceiveHandler = (m: IMESSAGE) => {
+    let copy = chat.map((e) => {
+      return e;
+    });
+    copy.push(m);
+    if (copy[0].sender_id === m.sender_id) {
+      setChat(copy);
     }
-  };
-
-  const AppendMessage = () => {
-    let newObj: IMESSAGE = { date: "", message, sender_id: myID };
-    let Chat: IMESSAGE[] = chat;
-    Chat.push(newObj);
-    setChat(Chat);
   };
 
   return (
@@ -46,19 +61,24 @@ function ChattingSection({ user, photo, myID }: Prop) {
             />
             <h5 className="text-body1 mt-4 font-bold ">{user.username}</h5>
           </div>
-          <div className="w-full h-full overflow-y-scroll scrollbar-hide p-6 flex flex-col justify-end">
-            {Array.isArray(chat) &&
-              chat.map((m, i) => {
-                return (
-                  <Message key={i} text={m} partner={user} myPhoto={photo} />
-                );
-              })}
+          <div className="w-full h-full mb-4 flex-col justify-end flex overflow-hidden">
+            <div
+              ref={ref}
+              className="w-full h-fit flex flex-col p-6 scrollbar-hide overflow-y-scroll "
+            >
+              {Array.isArray(chat) &&
+                chat.map((m, i) => {
+                  return (
+                    <Message key={i} text={m} partner={user} myPhoto={photo} />
+                  );
+                })}
+            </div>
           </div>
           <div className="z-40 border-t drop-shadow-2xl bg-white mb-4  bottom-4 rounded h-[96px] w-[90%] flex items-center p-4">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                AppendMessage();
+                newMessage();
                 setMessage("");
               }}
               className="w-full"
@@ -71,6 +91,7 @@ function ChattingSection({ user, photo, myID }: Prop) {
                   e.preventDefault();
                   setMessage(e.target.value);
                 }}
+                required
               />
             </form>
           </div>

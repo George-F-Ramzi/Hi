@@ -249,9 +249,20 @@ order by date asc`;
 
   pool.query(query, [user, id, id, user], (err, result: RowDataPacket[]) => {
     if (err) return res.status(404).send("Something wrong happen");
-    if (lodash.isEmpty(result)) {
-      return res.status(200).send("No Messasges Found");
-    }
     return res.status(200).send(result);
   });
+};
+
+export const InsertMessage = (message: any) => {
+  let query: string = `insert into Conversation (sender_id,receiver_id,message) values (?,?,?)`;
+
+  if (message[0]?.message != "") {
+    pool.query(
+      query,
+      [message[0].sender_id, message[1], message[0].message],
+      (err) => {
+        if (err) return console.log(err);
+      }
+    );
+  }
 };

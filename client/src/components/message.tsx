@@ -9,30 +9,36 @@ interface Prop {
 function Message({ text, partner, myPhoto }: Prop) {
   return (
     <>
-      {text.sender_id === partner.id ? (
-        <div className="w-full flex flex-col my-4">
-          <p className=" mb-1 ml-12 max-w-[280px] h-fit p-[16px] bg-gray4 text-body1 font-normal w-fit rounded-[20px] rounded-bl-none">
-            {text.message}
-          </p>
-          <img
-            src={partner.photo}
-            className="min-w-[40px] w-[40px] h-[40px] rounded-[100px] mb-4"
-          />
-        </div>
-      ) : (
-        <div className="w-full flex justify-end  my-4">
-          <div className="flex-col max-w-[280px] ">
-            <p className=" mb-1 mr-12 max-w-fit h-fit p-[16px] bg-blue1 text-white text-body1 font-normal w-fit rounded-br-none rounded-[20px]">
-              {text.message}
-            </p>
-            <div className="w-full flex justify-end max-h-[40px]">
+      {text.message != "" ? (
+        <>
+          {text.sender_id === partner.id ? (
+            <div className="w-full flex flex-col my-4">
+              <p className=" mb-1 ml-12 max-w-[280px] h-fit p-[16px] bg-gray4 text-body1 font-normal w-fit rounded-[20px] rounded-bl-none">
+                {text.message}
+              </p>
               <img
-                src={myPhoto}
+                src={partner.photo}
                 className="min-w-[40px] w-[40px] h-[40px] rounded-[100px] mb-4"
               />
             </div>
-          </div>
-        </div>
+          ) : (
+            <div className="w-full flex justify-end  my-4">
+              <div className="flex-col max-w-[280px] ">
+                <p className=" mb-1 mr-12 max-w-fit h-fit p-[16px] bg-blue1 text-white text-body1 font-normal w-fit rounded-br-none rounded-[20px]">
+                  {text.message}
+                </p>
+                <div className="w-full flex justify-end max-h-[40px]">
+                  <img
+                    src={myPhoto}
+                    className="min-w-[40px] w-[40px] h-[40px] rounded-[100px] mb-4"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        ""
       )}
     </>
   );

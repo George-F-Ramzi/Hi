@@ -3,11 +3,12 @@ import { FiCornerDownRight } from "react-icons/fi";
 import ChattingSection from "../components/chattingSection";
 import MainBar from "../components/mainBar";
 import RequestsBar from "../components/requestsBar";
-import Socket from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { AxiosResponse } from "axios";
-import { LoadingUser } from "../Api/authApi";
+import { Converstion, LoadingUser } from "../Api/authApi";
 import { toast } from "react-toastify";
-import { IUSER } from "../Types/authTypes";
+import { IMESSAGE, IUSER } from "../Types/authTypes";
+import lodash from "lodash";
 
 let url: string = "http://localhost:3001";
 let placeholder = { username: "", photo: "", id: 0, details: null };
@@ -16,33 +17,72 @@ function HomePage() {
   const [showRequest, setShowRequest] = useState<boolean>(true);
   const [user, setUser] = useState<IUSER>(placeholder);
   const [target, setTarget] = useState<IUSER>(placeholder);
+  const [chat, setChat] = useState<IMESSAGE[]>([]);
+  const [message, setMessage] = useState<string>("");
+  const [socket, setSocket] = useState<Socket>(io);
 
-  useEffect(() => {
+  useEffect((): any => {
+    setSocket(io(url));
     LoadUser();
+    return () => socket.close();
   }, []);
 
   useEffect(() => {
-    if (user.id != 0 && user.id != null) {
-      let io = Socket(url);
-      io.on("connect", () => {
-        io.emit("ID", user.id);
+    LoadChat();
+  }, [target]);
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      socket.emit("join", user.id);
+      socket.on("Joined", () => {
+        toast("Your Are Online Now", { type: "success" });
+        setChat([{ date: "", message: "", sender_id: 0 }]);
       });
-    }
-  }, [user]);
+    });
+  }, [user.id]);
 
   const LoadUser = async () => {
     try {
-      let data: AxiosResponse = await LoadingUser();
-      setUser(data.data);
+      let { data }: AxiosResponse = await LoadingUser();
+      setUser(data);
     } catch (error) {
-      toast("Somthing Wrong Happen", { type: "error" });
+      toast("Something Wrong Happen", { type: "error" });
+    }
+  };
+
+  const AppendMessage = () => {
+    let m: IMESSAGE = { date: "", message, sender_id: user.id };
+    socket.emit("send", [m, target.id]);
+    let copy = chat.map((e) => {
+      return e;
+    });
+    setChat([...copy, m]);
+  };
+
+  const LoadChat = async () => {
+    try {
+      let { data }: AxiosResponse = await Converstion(target.id);
+      if (lodash.isEmpty(data)) {
+        setChat([{ date: "", message: "", sender_id: target.id }]);
+      } else setChat(data);
+    } catch (error) {
+      toast("Something Wrong Happen", { type: "error" });
     }
   };
 
   return (
     <div className="flex relative">
       <MainBar mainUSER={user} setTarget={setTarget} />
-      <ChattingSection user={target} photo={user.photo} myID={user.id} />
+      <ChattingSection
+        setMessage={setMessage}
+        message={message}
+        user={target}
+        photo={user.photo}
+        chat={chat}
+        newMessage={AppendMessage}
+        setChat={setChat}
+        socket={socket}
+      />
       {showRequest ? (
         <RequestsBar show={setShowRequest} />
       ) : (

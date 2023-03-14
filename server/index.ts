@@ -6,6 +6,7 @@ import http from "http";
 import cors from "cors";
 import userRoute from "./Routes/userRoute";
 import authRoute from "./Routes/authRoute";
+import { InsertMessage } from "./Controllers/authController";
 
 const app = express();
 const server = http.createServer(app);
@@ -17,11 +18,13 @@ app.use(userRoute);
 app.use(authRoute);
 
 io.on("connection", (socket: Socket) => {
-  socket.on("ID", (id) => {
+  socket.on("join", (id) => {
     socket.join(id);
-    socket.on("receive", (message) => {
-      console.log(message);
-    });
+    socket.emit("Joined");
+  });
+  socket.on("send", (value) => {
+    socket.broadcast.in(value[1]).emit("receive", value[0]);
+    InsertMessage(value);
   });
 });
 
