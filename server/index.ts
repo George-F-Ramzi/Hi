@@ -13,12 +13,12 @@ const app = express();
 app.use(
   cors({
     exposedHeaders: "x-auth-token",
-    origin: "*",
+    origin: "https://hi-eight-peach.vercel.app/",
   })
 );
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: { origin: "https://hi-eight-peach.vercel.app/", credentials: true },
 });
 
 app.use(express.json());

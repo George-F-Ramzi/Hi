@@ -26,7 +26,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect((): any => {
-    setSocket(io(url));
+    setSocket(io(url, { withCredentials: true }));
     LoadUser();
     return () => socket.close();
   }, []);
