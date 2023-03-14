@@ -29,7 +29,10 @@ function HomePage() {
     setSocket(
       io(url, {
         withCredentials: true,
-        extraHeaders: { "x-auth-token": localStorage.getItem("token")! },
+        extraHeaders: {
+          "x-auth-token": localStorage.getItem("token")!,
+          "Access-Control-Allow-Origin": "https://hi-eight-peach.vercel.app",
+        },
       })
     );
     LoadUser();
