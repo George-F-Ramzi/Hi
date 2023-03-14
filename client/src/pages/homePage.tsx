@@ -26,15 +26,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect((): any => {
-    setSocket(
-      io(url, {
-        withCredentials: true,
-        extraHeaders: {
-          ["Access-Control-Allow-Credentials"]: "true",
-          ["Access-Control-Allow-Origin"]: "https://hi-eight-peach.vercel.app",
-        },
-      })
-    );
+    setSocket(io(url));
     LoadUser();
     return () => socket.close();
   }, []);
