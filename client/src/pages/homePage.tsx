@@ -30,7 +30,6 @@ function HomePage() {
       io(url, {
         withCredentials: true,
         transports: ["websocket"],
-        secure: true,
       })
     );
     LoadUser();
