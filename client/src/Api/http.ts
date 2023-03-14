@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "hi-node-4yx80pf29-george-f-ramzi.vercel.app",
   headers: { "x-auth-token": localStorage.getItem("token") },
 });
