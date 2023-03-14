@@ -30,10 +30,8 @@ function HomePage() {
       io(url, {
         withCredentials: true,
         extraHeaders: {
-          "x-auth-token": localStorage.getItem("token")!,
           "Access-Control-Allow-Origin": "https://hi-eight-peach.vercel.app",
         },
-        transports: ["websocket", "polling", "flashsocket"],
       })
     );
     LoadUser();
