@@ -1,8 +1,17 @@
-import mysql from "mysql2";
+import mysql, { PoolOptions } from "mysql2";
 import { Pool } from "mysql2/typings/mysql";
 
-let pool: Pool = mysql.createPool({
-  uri: process.env.DATABASE_URL,
-});
+let config: PoolOptions = {
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: "Hi",
+  ssl: {
+    rejectUnauthorized: true,
+  },
+};
+
+let pool: Pool = mysql.createPool(config);
 
 export default pool;
