@@ -10,7 +10,9 @@ import { InsertMessage } from "./Controllers/authController";
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { cors: {} });
+const io = new Server(server, {
+  cors: { origin: "https://hi-eight-peach.vercel.app/" },
+});
 
 app.use(cors({ exposedHeaders: "x-auth-token" }));
 app.use(express.json());
