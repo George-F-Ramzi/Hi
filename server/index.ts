@@ -12,16 +12,14 @@ const app = express();
 
 app.use(
   cors({
-    exposedHeaders: ["x-auth-token", "Access-Control-Allow-Origin"],
+    exposedHeaders: "x-auth-token",
     origin: "https://hi-eight-peach.vercel.app",
-    credentials: true,
   })
 );
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "https://hi-eight-peach.vercel.app",
-    exposedHeaders: ["x-auth-token", "Access-Control-Allow-Origin"],
     credentials: true,
   },
 });

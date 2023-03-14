@@ -29,9 +29,6 @@ function HomePage() {
     setSocket(
       io(url, {
         withCredentials: true,
-        extraHeaders: {
-          "Access-Control-Allow-Origin": "https://hi-eight-peach.vercel.app",
-        },
       })
     );
     LoadUser();
