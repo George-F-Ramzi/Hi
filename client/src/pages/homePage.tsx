@@ -12,7 +12,7 @@ import lodash from "lodash";
 import { TailSpin } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 
-let url: string = "https://hi-node-js.vercel.app/";
+let url: string = "https://hi-server.onrender.com";
 let placeholder = { username: "", photo: "", id: 0, details: null };
 
 function HomePage() {
