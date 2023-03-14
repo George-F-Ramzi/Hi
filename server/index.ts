@@ -13,12 +13,15 @@ const app = express();
 app.use(
   cors({
     exposedHeaders: "x-auth-token",
-    origin: "https://hi-eight-peach.vercel.app",
+    origin: "https://effortless-gingersnap-cf79a0.netlify.app",
   })
 );
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "https://hi-eight-peach.vercel.app", credentials: true },
+  cors: {
+    origin: "https://effortless-gingersnap-cf79a0.netlify.app",
+    credentials: true,
+  },
 });
 
 app.use(express.json());
