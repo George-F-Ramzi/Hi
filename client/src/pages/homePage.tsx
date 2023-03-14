@@ -9,6 +9,8 @@ import { Converstion, LoadingUser } from "../Api/authApi";
 import { toast } from "react-toastify";
 import { IMESSAGE, IUSER } from "../Types/authTypes";
 import lodash from "lodash";
+import { TailSpin } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 let url: string = "http://localhost:3001";
 let placeholder = { username: "", photo: "", id: 0, details: null };
@@ -20,6 +22,8 @@ function HomePage() {
   const [chat, setChat] = useState<IMESSAGE[]>([]);
   const [message, setMessage] = useState<string>("");
   const [socket, setSocket] = useState<Socket>(io);
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect((): any => {
     setSocket(io(url));
@@ -43,10 +47,13 @@ function HomePage() {
 
   const LoadUser = async () => {
     try {
+      setLoading(true);
       let { data }: AxiosResponse = await LoadingUser();
       setUser(data);
+      setLoading(false);
     } catch (error) {
-      toast("Something Wrong Happen", { type: "error" });
+      localStorage.removeItem("token");
+      navigate("/", { replace: true });
     }
   };
 
@@ -71,31 +78,39 @@ function HomePage() {
   };
 
   return (
-    <div className="flex relative">
-      <MainBar mainUSER={user} setTarget={setTarget} />
-      <ChattingSection
-        setMessage={setMessage}
-        message={message}
-        user={target}
-        photo={user.photo}
-        chat={chat}
-        newMessage={AppendMessage}
-        setChat={setChat}
-        socket={socket}
-      />
-      {showRequest ? (
-        <RequestsBar show={setShowRequest} />
+    <>
+      {loading ? (
+        <div className="h-screen w-screen flex items-center justify-center">
+          <TailSpin />
+        </div>
       ) : (
-        <div
-          onClick={() => {
-            setShowRequest(true);
-          }}
-          className="absolute right-8 top-8 h-[48px] w-[48px] bg-white flex  justify-center items-center rounded shadow-lg cursor-pointer"
-        >
-          <FiCornerDownRight />
+        <div className="flex relative">
+          <MainBar mainUSER={user} setTarget={setTarget} />
+          <ChattingSection
+            setMessage={setMessage}
+            message={message}
+            user={target}
+            photo={user.photo}
+            chat={chat}
+            newMessage={AppendMessage}
+            setChat={setChat}
+            socket={socket}
+          />
+          {showRequest ? (
+            <RequestsBar show={setShowRequest} />
+          ) : (
+            <div
+              onClick={() => {
+                setShowRequest(true);
+              }}
+              className="absolute right-8 top-8 h-[48px] w-[48px] bg-white flex  justify-center items-center rounded shadow-lg cursor-pointer"
+            >
+              <FiCornerDownRight />
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }
 

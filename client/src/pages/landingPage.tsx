@@ -10,12 +10,17 @@ function LandingPage() {
   }, []);
 
   const FastJoin = async () => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+      return;
+    }
     try {
       await AllowJoin();
-      return navigate("/home");
+      navigate("/home");
     } catch (error) {
       toast("Login Session Expired", { type: "error" });
-      return navigate("/login");
+      localStorage.removeItem("token");
+      navigate("/login");
     }
   };
 

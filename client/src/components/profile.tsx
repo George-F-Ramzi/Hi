@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { FiArrowLeft, FiSettings } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   AcceptRequest,
@@ -23,6 +24,7 @@ interface Prop {
 function Profile({ user, isMe, isContact, close, setTarget }: Prop) {
   const [sending, setSending] = useState<boolean>(false);
   const [receiving, setReceiving] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSending(false);
@@ -169,6 +171,19 @@ function Profile({ user, isMe, isContact, close, setTarget }: Prop) {
           className="shadow-sm w-full mt-12 py-[12px] bg-primary rounded text-white uppercase text-body1"
         >
           Send Request
+        </button>
+      ) : (
+        ""
+      )}
+      {isMe ? (
+        <button
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/", { replace: true });
+          }}
+          className="shadow-sm w-full mt-12 py-[12px] bg-primary rounded text-white uppercase text-body1"
+        >
+          Logout
         </button>
       ) : (
         ""
