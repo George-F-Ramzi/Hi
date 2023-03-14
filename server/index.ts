@@ -14,6 +14,7 @@ app.use(
   cors({
     exposedHeaders: "x-auth-token",
     origin: "*",
+    credentials: true,
   })
 );
 const server = http.createServer(app);
@@ -21,6 +22,7 @@ const io = new Server(server, {
   cors: {
     origin: "*",
     exposedHeaders: "x-auth-token",
+    credentials: true,
   },
 });
 

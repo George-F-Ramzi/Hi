@@ -26,7 +26,12 @@ function HomePage() {
   const navigate = useNavigate();
 
   useEffect((): any => {
-    setSocket(io(url));
+    setSocket(
+      io(url, {
+        withCredentials: true,
+        extraHeaders: { "x-auth-token": localStorage.getItem("token")! },
+      })
+    );
     LoadUser();
     return () => socket.close();
   }, []);
