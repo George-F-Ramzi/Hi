@@ -81,7 +81,7 @@ function HomePage() {
     <>
       {loading ? (
         <div className="h-screen w-screen flex items-center justify-center">
-          <TailSpin />
+          <TailSpin color="blue" />
         </div>
       ) : (
         <div className="flex relative">

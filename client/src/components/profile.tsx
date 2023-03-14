@@ -84,11 +84,6 @@ function Profile({ user, isMe, isContact, close, setTarget }: Prop) {
             <h5 className="text-black font-semibold text-body1 grow">
               {user.username}
             </h5>
-            {isMe ? (
-              <FiSettings size={"18px"} className="cursor-pointer" />
-            ) : (
-              ""
-            )}
           </div>
           <p className="text-body2 mt-2 text-slate-700">{user.details}</p>
         </div>

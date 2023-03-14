@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { FiMessageSquare } from "react-icons/fi";
 import { Socket } from "socket.io-client";
 import { IMESSAGE, IUSER } from "../Types/authTypes";
 import Message from "./message";
@@ -97,7 +98,12 @@ function ChattingSection({
           </div>
         </div>
       ) : (
-        ""
+        <div className="w-full h-full flex-col flex justify-center items-center">
+          <FiMessageSquare size={"48px"} />
+          <h5 className="mt-6 font-semibold">
+            Start Chatting With Your Friends
+          </h5>
+        </div>
       )}
     </div>
   );
