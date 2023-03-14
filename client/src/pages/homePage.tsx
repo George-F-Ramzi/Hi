@@ -29,7 +29,7 @@ function HomePage() {
     setSocket(
       io(url, {
         withCredentials: true,
-        transports: ["websocket"],
+        transports: ["polling", "websocket"],
       })
     );
     LoadUser();
