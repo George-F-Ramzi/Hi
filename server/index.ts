@@ -9,6 +9,13 @@ import authRoute from "./Routes/authRoute";
 import { InsertMessage } from "./Controllers/authController";
 
 const app = express();
+
+app.use(
+  cors({
+    exposedHeaders: "x-auth-token",
+    origin: "https://hi-eight-peach.vercel.app/",
+  })
+);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -17,12 +24,6 @@ const io = new Server(server, {
   },
 });
 
-app.use(
-  cors({
-    exposedHeaders: "x-auth-token",
-    origin: "https://hi-eight-peach.vercel.app/",
-  })
-);
 app.use(express.json());
 app.use(userRoute);
 app.use(authRoute);
