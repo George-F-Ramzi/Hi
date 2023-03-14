@@ -14,6 +14,7 @@ app.use(
   cors({
     exposedHeaders: "x-auth-token",
     origin: "https://hi-eight-peach.vercel.app",
+    credentials: true,
   })
 );
 const server = http.createServer(app);
